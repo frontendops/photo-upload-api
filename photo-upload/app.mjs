@@ -13,10 +13,12 @@
 
 export const lambdaHandler = async (event, context) => {
     try {
+        const userId = event.queryStringParameters.userId
+
         return {
             'statusCode': 200,
             'body': JSON.stringify({
-                message: 'hello world',
+                message: `Photo succesfully uploaded for ${userId}`,
             })
         }
     } catch (err) {

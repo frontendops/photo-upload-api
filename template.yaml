@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   photo-app-api
@@ -9,39 +9,40 @@ Description: >
 Globals:
   Function:
     Timeout: 3
-
     Tracing: Active
-    # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
-    LoggingConfig:
-      LogFormat: JSON
   Api:
+    Auth:
+      ApiKeyRequired: true
     TracingEnabled: true
 Resources:
-  HelloWorldFunction:
+  PhotoUploadFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: hello-world/
+      CodeUri: photo-upload/
       Handler: app.lambdaHandler
       Runtime: nodejs18.x
       Architectures:
-      - x86_64
+        - x86_64
       Events:
-        HelloWorld:
+        PhotoUpload:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /hello
-            Method: get
-
+            Path: /photo-upload
+            Method: POST
+            RequestParameters:
+              - method.request.querystring.userId:
+                  Required: true
+                  Caching: false
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod stage for Hello World function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: Hello World Lambda Function ARN
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  PhotoUploadApi:
+    Description: API Gateway endpoint URL for Prod stage for Photo Upload function
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/photo-upload/"
+  PhotoUploadFunction:
+    Description: Photo Upload Lambda Function ARN
+    Value: !GetAtt PhotoUploadFunction.Arn
+  PhotoUploadFunctionIamRole:
+    Description: Implicit IAM Role created for Photo Upload function
+    Value: !GetAtt PhotoUploadFunctionRole.Arn
