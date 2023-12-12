@@ -12,14 +12,32 @@ Globals:
     Tracing: Active
   Api:
     Auth:
-      ApiKeyRequired: true
+      DefaultAuthorizer: MyLambdaTokenAuthorizer
+      Authorizers:
+        MyLambdaTokenAuthorizer:
+          FunctionArn: !GetAtt MyAuthFunction.Arn
+      ApiKeyRequired: false
     TracingEnabled: true
 Resources:
+  PhotosBucket:
+    Type: AWS::S3::Bucket
+  MyAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda-authorizer/
+      Handler: authorizer.handler
+      Runtime: nodejs18.x
   PhotoUploadFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Connections:
+      Output:
+        Destination: ${PhotosBucket}
     Properties:
       CodeUri: photo-upload/
       Handler: app.lambdaHandler
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref PhotosBucket
       Runtime: nodejs18.x
       Architectures:
         - x86_64

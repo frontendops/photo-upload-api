@@ -1,0 +1,11 @@
+{
+  "name": "lambda-authorizer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Alejandro Sierra",
+  "license": "ISC"
+}
