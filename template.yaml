@@ -25,8 +25,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: lambda-authorizer/
-      Handler: authorizer.handler
+      Handler: index.handler
       Runtime: nodejs18.x
+      Policies:
+        - SecretsManagerReadWrite
   PhotoUploadFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Connections:

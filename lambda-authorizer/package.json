@@ -2,10 +2,13 @@
   "name": "lambda-authorizer",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "test"
   },
   "author": "Alejandro Sierra",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.2"
+  }
 }
